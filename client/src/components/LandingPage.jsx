@@ -718,22 +718,7 @@ const LandingPage = () => {
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 -z-10"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md hover:bg-white/10 transition-all cursor-pointer group hover:border-fuchsia-500/30">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
-            </span>
-            <span className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">
-              V2.0 Now with Mood Tracking
-            </span>
-            <ArrowRight
-              size={14}
-              className="text-gray-500 group-hover:text-fuchsia-400 transition-colors -ml-1 group-hover:translate-x-0.5"
-            />
-          </div>
-
-          {/* Main Title */}
+          {/* Headline */}
           <h1 className="text-6xl md:text-8xl font-bold tracking-tight mb-8">
             Find your{" "}
             <span className="bg-gradient-to-r from-fuchsia-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
