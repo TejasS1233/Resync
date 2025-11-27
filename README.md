@@ -1,4 +1,4 @@
-# Cadence
+# Resync
 
 A full-stack MERN application for tracking goals, habits, and daily progress with calendar views and activity heatmaps.
 
