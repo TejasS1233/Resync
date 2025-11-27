@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Pencil, Trash2, Plus, Minus, Calendar, Target } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
 import { Badge } from "./ui/badge";
@@ -69,8 +68,8 @@ const GoalCard = ({ goal, onEdit, onDelete, onUpdateProgress }) => {
   };
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader>
+    <div className="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-6 hover:bg-white/10 transition-all">
+      <div>
         <div className="flex items-start justify-between mb-2">
           <Badge className={getCategoryColor()}>{goal.category}</Badge>
           <div className="flex gap-1">
@@ -108,19 +107,19 @@ const GoalCard = ({ goal, onEdit, onDelete, onUpdateProgress }) => {
             </AlertDialog>
           </div>
         </div>
-        <CardTitle className="text-xl">{goal.title}</CardTitle>
+        <h3 className="text-xl font-bold text-white mb-1">{goal.title}</h3>
         {goal.description && (
-          <CardDescription className="line-clamp-2">{goal.description}</CardDescription>
+          <p className="text-sm text-gray-400 line-clamp-2">{goal.description}</p>
         )}
-      </CardHeader>
+      </div>
 
-      <CardContent className="space-y-4">
+      <div className="space-y-4 mt-4">
         <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center gap-2 text-gray-400">
             <Calendar className="h-4 w-4" />
             <span>{formatFrequency(goal.frequency)}</span>
           </div>
-          <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center gap-2 text-gray-400">
             <Target className="h-4 w-4" />
             <span>Target: {goal.targetCount}</span>
           </div>
@@ -154,8 +153,8 @@ const GoalCard = ({ goal, onEdit, onDelete, onUpdateProgress }) => {
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

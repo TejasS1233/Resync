@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from "lucide-react";
 import { Badge } from "./ui/badge";
@@ -41,7 +40,11 @@ const CalendarView = ({ goals }) => {
 
   const getProgressForDate = (day) => {
     const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    const dateStr = date.toISOString().split("T")[0];
+    // Use local timezone for date string
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const dayStr = String(date.getDate()).padStart(2, "0");
+    const dateStr = `${year}-${month}-${dayStr}`;
 
     const dayProgress = [];
     goals.forEach((goal) => {
@@ -86,15 +89,15 @@ const CalendarView = ({ goals }) => {
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
+    <div className="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-6">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <CalendarIcon className="h-5 w-5" />
+            <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+              <CalendarIcon className="h-6 w-6" />
               Calendar View
-            </CardTitle>
-            <CardDescription>Track your daily progress</CardDescription>
+            </h3>
+            <p className="text-sm text-gray-400 mt-1">Track your daily progress</p>
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={goToToday}>
@@ -104,7 +107,7 @@ const CalendarView = ({ goals }) => {
               <Button variant="ghost" size="icon" onClick={goToPreviousMonth}>
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <span className="text-sm font-medium min-w-[120px] text-center">
+              <span className="text-sm font-medium min-w-[120px] text-center text-white">
                 {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
               </span>
               <Button variant="ghost" size="icon" onClick={goToNextMonth}>
@@ -113,11 +116,9 @@ const CalendarView = ({ goals }) => {
             </div>
           </div>
         </div>
-      </CardHeader>
-      <CardContent>
         <div className="grid grid-cols-7 gap-2">
           {weekDays.map((day) => (
-            <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">
+            <div key={day} className="text-center text-sm font-medium text-gray-400 py-2">
               {day}
             </div>
           ))}
@@ -162,7 +163,7 @@ const CalendarView = ({ goals }) => {
                           </div>
                         ))
                       ) : (
-                        <p className="text-sm text-muted-foreground">No activity</p>
+                        <p className="text-sm text-gray-400">No activity</p>
                       )}
                     </div>
                   </TooltipContent>
@@ -171,8 +172,8 @@ const CalendarView = ({ goals }) => {
             );
           })}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

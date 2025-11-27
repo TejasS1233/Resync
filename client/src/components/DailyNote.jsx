@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
@@ -14,10 +13,19 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
 const DailyNote = () => {
   const { isGuest } = useAuth();
+
+  // Helper to get local date string in YYYY-MM-DD format
+  const getLocalDateString = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const [note, setNote] = useState({
     content: "",
     mood: "",
-    date: new Date().toISOString().split("T")[0],
+    date: getLocalDateString(),
   });
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -95,23 +103,23 @@ const DailyNote = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
+    <div className="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-6">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5 text-purple-600" />
-            <CardTitle>Today's Journal</CardTitle>
+            <BookOpen className="h-5 w-5 text-purple-400" />
+            <h3 className="text-2xl font-bold text-white">Today's Journal</h3>
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-gray-400">
             <Calendar className="h-4 w-4" />
             {format(new Date(), "MMM dd, yyyy")}
           </div>
         </div>
-        <CardDescription>
+        <p className="text-sm text-gray-400">
           Write down what you accomplished today and how you're feeling
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+        </p>
+      </div>
+      <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="mood">How are you feeling?</Label>
           <Select value={note.mood} onValueChange={(value) => setNote({ ...note, mood: value })}>
@@ -144,8 +152,8 @@ const DailyNote = () => {
           <Save className="h-4 w-4" />
           {saving ? "Saving..." : "Save Note"}
         </Button>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

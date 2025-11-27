@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Calendar, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -96,42 +95,41 @@ const NotesHistory = () => {
 
   if (loading) {
     return (
-      <Card>
-        <CardContent className="py-8">
-          <div className="text-center text-muted-foreground">Loading notes...</div>
-        </CardContent>
-      </Card>
+      <div className="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-8">
+        <div className="text-center text-gray-400">Loading notes...</div>
+      </div>
     );
   }
 
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Your Journal</h2>
-        <p className="text-muted-foreground">Review your past entries</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Your Journal</h2>
+        <p className="text-gray-400">Review your past entries</p>
       </div>
 
       {notes.length === 0 ? (
-        <Card>
-          <CardContent className="py-16 text-center">
-            <Calendar className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold mb-2">No notes yet</h3>
-            <p className="text-muted-foreground">Start writing daily notes to track your journey</p>
-          </CardContent>
-        </Card>
+        <div className="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl py-16 text-center">
+          <Calendar className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+          <h3 className="text-xl font-semibold text-white mb-2">No notes yet</h3>
+          <p className="text-gray-400">Start writing daily notes to track your journey</p>
+        </div>
       ) : (
         <div className="space-y-4">
           {notes.map((note) => {
             const noteId = isGuest ? note.date : note._id;
             return (
-              <Card key={noteId} className="hover:shadow-md transition-shadow">
-                <CardHeader>
+              <div
+                key={noteId}
+                className="rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl p-6 hover:bg-white/10 transition-all"
+              >
+                <div>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <CardTitle className="text-lg">
+                        <h3 className="text-lg font-bold text-white">
                           {format(new Date(note.date), "EEEE, MMMM dd, yyyy")}
-                        </CardTitle>
+                        </h3>
                         {note.mood && (
                           <Badge className={`${getMoodColor(note.mood)} text-white`}>
                             {getMoodLabel(note.mood)}
@@ -169,13 +167,11 @@ const NotesHistory = () => {
                       </AlertDialogContent>
                     </AlertDialog>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                    {note.content}
-                  </p>
-                </CardContent>
-              </Card>
+                </div>
+                <div className="mt-4">
+                  <p className="text-sm text-gray-300 whitespace-pre-wrap">{note.content}</p>
+                </div>
+              </div>
             );
           })}
         </div>
