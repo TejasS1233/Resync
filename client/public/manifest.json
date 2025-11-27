@@ -1,0 +1,26 @@
+{
+  "name": "Resync - Track. Execute. Journal.",
+  "short_name": "Resync",
+  "description": "A modern goal tracking and habit management application",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#c026d3",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/image.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/image.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "lifestyle"],
+  "screenshots": []
+}
