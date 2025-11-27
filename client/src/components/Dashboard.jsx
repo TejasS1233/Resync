@@ -14,6 +14,7 @@ import {
   LayoutDashboard,
   MoreVertical,
   X,
+  Zap,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import GoalForm from "./GoalForm";
@@ -22,6 +23,7 @@ import DailyNote from "./DailyNote";
 import NotesHistory from "./NotesHistory";
 import ActivityHeatmap from "./ActivityHeatmap";
 import Breadcrumbs from "./Breadcrumbs";
+import ZenMode from "./ZenMode";
 import { useAuth } from "../context/AuthContext";
 
 // Guest Banner Component
@@ -60,6 +62,7 @@ const Dashboard = ({
   const [showForm, setShowForm] = useState(false);
   const [editingGoal, setEditingGoal] = useState(null);
   const [filterCategory, setFilterCategory] = useState("all");
+  const [showZenMode, setShowZenMode] = useState(false);
 
   const handleEdit = (goal) => {
     setEditingGoal(goal);
@@ -123,6 +126,16 @@ const Dashboard = ({
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-4">
+              <button
+                onClick={() => setShowZenMode(true)}
+                className="group relative px-5 py-2.5 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-full font-bold text-sm overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(217,70,239,0.4)]"
+                title="Zen Mode - Focus Timer"
+              >
+                <span className="relative flex items-center gap-2">
+                  <Zap className="h-4 w-4" strokeWidth={3} />
+                  <span className="hidden sm:inline">Zen</span>
+                </span>
+              </button>
               <button
                 onClick={() => setShowForm(true)}
                 className="group relative px-5 py-2.5 bg-white text-black rounded-full font-bold text-sm overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
@@ -388,6 +401,17 @@ const Dashboard = ({
               </div>
             </div>
           </>
+        )}
+
+        {/* Zen Mode */}
+        {showZenMode && (
+          <ZenMode
+            goals={goals}
+            onCompleteGoal={(goal) => {
+              onUpdateProgress(goal._id, 1);
+            }}
+            onClose={() => setShowZenMode(false)}
+          />
         )}
       </div>
     </div>
