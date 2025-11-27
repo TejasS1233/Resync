@@ -13,7 +13,7 @@ const Navbar = ({ onGetStarted, onLogin }) => {
             <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-fuchsia-600 rounded-lg flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(139,92,246,0.5)] transition-all">
               <span className="text-white font-bold text-lg">C</span>
             </div>
-            <span className="text-white font-semibold text-xl tracking-tight">Cadence</span>
+            <span className="text-white font-semibold text-xl tracking-tight">Resync</span>
           </div>
 
           {/* Desktop Links */}

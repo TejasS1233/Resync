@@ -24,7 +24,7 @@ import {
 // --- THE CINEMATIC INTRO COMPONENT ---
 const IntroOverlay = ({ onComplete }) => {
   const [text, setText] = useState("");
-  const finalText = "CADENCE";
+  const finalText = "RESYNC";
   const [phase, setPhase] = useState(0); // 0: Start, 1: Typing, 2: Line Expand, 3: Split
 
   useEffect(() => {
@@ -112,12 +112,46 @@ const IntroOverlay = ({ onComplete }) => {
 // --- NAVBAR COMPONENT ---
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallButton(true);
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    // Check if app is already installed
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      setShowInstallButton(false);
+    }
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === "accepted") {
+      setShowInstallButton(false);
+    }
+
+    setDeferredPrompt(null);
+  };
 
   return (
     <nav
@@ -129,16 +163,32 @@ const Navbar = () => {
           <div className="flex-shrink-0 flex items-center gap-3 cursor-pointer group">
             <img
               src="/image.png"
-              alt="Cadence Logo"
+              alt="Resync Logo"
               className="w-10 h-10 object-contain group-hover:scale-105 transition-transform"
             />
             <span className="text-white font-bold text-xl tracking-tight group-hover:text-fuchsia-100 transition-colors">
-              Cadence
+              Resync
             </span>
           </div>
 
           {/* CTA Buttons */}
           <div className="flex items-center gap-4">
+            {showInstallButton && (
+              <button
+                onClick={handleInstallClick}
+                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/5 text-white text-sm font-medium hover:bg-white/10 transition-all"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  />
+                </svg>
+                Install App
+              </button>
+            )}
             <Link
               to="/login"
               className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
@@ -283,12 +333,12 @@ const InteractiveFeatures = () => {
               <div className="flex gap-2 items-center opacity-50">
                 <span className="text-blue-500">➜</span>
                 <span className="text-cyan-400">~</span>
-                <span>cadence status</span>
+                <span>resync status</span>
               </div>
               <div className="flex gap-2 items-center">
                 <span className="text-blue-500">➜</span>
                 <span className="text-cyan-400">~</span>
-                <span className="text-white">cadence log "Deep Work" --time=60m</span>
+                <span className="text-white">resync log "Deep Work" --time=60m</span>
               </div>
               <div className="space-y-1 pl-4 border-l-2 border-blue-500/20 my-2">
                 <div className="text-emerald-400">✓ Session logged</div>
@@ -509,7 +559,7 @@ const KeyboardMastery = () => {
             Don't touch that mouse.
           </h2>
           <p className="text-gray-400 text-lg leading-relaxed mb-8">
-            Cadence is built for flow. Toggle dark mode, log a habit, or check your stats instantly
+            Resync is built for flow. Toggle dark mode, log a habit, or check your stats instantly
             with our global command menu.
           </p>
 
@@ -692,7 +742,7 @@ const LandingPage = () => {
           </h1>
 
           <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Cadence is the developer-friendly habit tracker. Visualize your progress with heatmaps,
+            Resync is the developer-friendly habit tracker. Visualize your progress with heatmaps,
             track daily moods, and build streaks that stick.
           </p>
 
@@ -738,7 +788,7 @@ const LandingPage = () => {
                 </div>
                 <div className="ml-4 flex-1 flex justify-center">
                   <div className="px-4 py-1 bg-white/5 rounded-full text-[10px] text-gray-500 font-mono border border-white/5 flex items-center gap-2">
-                    <Lock size={8} /> cadence.app/dashboard
+                    <Lock size={8} /> resync.app/dashboard
                   </div>
                 </div>
               </div>
@@ -893,8 +943,8 @@ const LandingPage = () => {
 
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3">
-            <img src="/image.png" alt="Cadence Logo" className="w-8 h-8 object-contain" />
-            <span className="text-white font-bold text-xl tracking-tight">Cadence</span>
+            <img src="/image.png" alt="Resync Logo" className="w-8 h-8 object-contain" />
+            <span className="text-white font-bold text-xl tracking-tight">Resync</span>
           </div>
           <div className="flex gap-8 text-sm text-gray-400">
             <a href="#" className="hover:text-fuchsia-400 transition-colors">
@@ -912,7 +962,7 @@ const LandingPage = () => {
           </div>
         </div>
         <div className="text-center mt-10 text-gray-600 text-xs">
-          © {new Date().getFullYear()} Cadence. All rights reserved.
+          © {new Date().getFullYear()} Resync. All rights reserved.
         </div>
       </footer>
     </div>
