@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { goalAPI } from "./api/api";
 import Dashboard from "./components/Dashboard";
-import AuthForm from "./components/AuthForm";
+import LoginPage from "./components/LoginPage";
+import SignupPage from "./components/SignupPage";
 import LandingPage from "./components/LandingPage";
+import ProfilePage from "./components/ProfilePage";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 import { useAuth } from "./context/AuthContext";
@@ -33,8 +35,26 @@ function App() {
   const loadGuestData = () => {
     const storedGoals = localStorage.getItem("guestGoals");
     const parsedGoals = storedGoals ? JSON.parse(storedGoals) : [];
-    setGoals(parsedGoals);
-    calculateGuestStats(parsedGoals);
+
+    // Calculate currentProgress for each goal
+    const goalsWithProgress = parsedGoals.map((g) => {
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      const todayProgress = g.progress?.find((p) => p.date.startsWith(today));
+      const completed = todayProgress?.completed || 0;
+
+      return {
+        ...g,
+        currentProgress: {
+          completed,
+          target: g.targetCount,
+          percentage: Math.round((completed / g.targetCount) * 100),
+        },
+      };
+    });
+
+    setGoals(goalsWithProgress);
+    calculateGuestStats(goalsWithProgress);
   };
 
   const saveGuestData = (updatedGoals) => {
@@ -131,6 +151,11 @@ function App() {
         ...goalData,
         _id: Date.now().toString(),
         progress: [],
+        currentProgress: {
+          completed: 0,
+          target: goalData.targetCount,
+          percentage: 0,
+        },
         createdAt: new Date().toISOString(),
       };
       const updatedGoals = [newGoal, ...goals];
@@ -202,21 +227,33 @@ function App() {
       const updatedGoals = goals.map((g) => {
         if (g._id === id) {
           const progress = g.progress || [];
-          const today = new Date().toISOString().split("T")[0];
+          // Use local date for comparison
+          const now = new Date();
+          const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
           const existingIndex = progress.findIndex((p) => p.date.startsWith(today));
 
+          let newCompleted = 0;
           if (existingIndex >= 0) {
             // Increment or decrement count
             const currentCount = progress[existingIndex].completed || 0;
+            newCompleted = completed ? currentCount + 1 : Math.max(currentCount - 1, 0);
             progress[existingIndex] = {
-              date: new Date().toISOString(),
-              completed: completed ? currentCount + 1 : Math.max(currentCount - 1, 0),
+              date: now.toISOString(),
+              completed: newCompleted,
             };
           } else {
-            progress.push({ date: new Date().toISOString(), completed: completed ? 1 : 0 });
+            newCompleted = completed ? 1 : 0;
+            progress.push({ date: now.toISOString(), completed: newCompleted });
           }
 
-          return { ...g, progress };
+          // Calculate currentProgress for display
+          const currentProgress = {
+            completed: newCompleted,
+            target: g.targetCount,
+            percentage: Math.round((newCompleted / g.targetCount) * 100),
+          };
+
+          return { ...g, progress, currentProgress };
         }
         return g;
       });
@@ -252,14 +289,11 @@ function App() {
 
   return (
     <>
-      {showAuthForm && !isAuthenticated && (
-        <div className="fixed inset-0 z-50 bg-background">
-          <AuthForm onClose={() => setShowAuthForm(false)} />
-        </div>
-      )}
-
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route
           path="/dashboard"
           element={
@@ -271,7 +305,7 @@ function App() {
               onUpdateGoal={handleUpdateGoal}
               onDeleteGoal={handleDeleteGoal}
               onUpdateProgress={handleUpdateProgress}
-              onShowAuth={() => setShowAuthForm(true)}
+              onShowAuth={() => navigate("/login")}
             />
           }
         />

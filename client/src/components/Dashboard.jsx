@@ -20,8 +20,8 @@ import GoalForm from "./GoalForm";
 import GoalCard from "./GoalCard";
 import DailyNote from "./DailyNote";
 import NotesHistory from "./NotesHistory";
-import CalendarView from "./CalendarView";
-import ProfilePage from "./ProfilePage";
+import ActivityHeatmap from "./ActivityHeatmap";
+import Breadcrumbs from "./Breadcrumbs";
 import { useAuth } from "../context/AuthContext";
 
 // Guest Banner Component
@@ -113,11 +113,11 @@ const Dashboard = ({
             <Link to="/" className="flex-shrink-0 flex items-center gap-3 cursor-pointer group">
               <img
                 src="/image.png"
-                alt="Cadence Logo"
+                alt="Resync Logo"
                 className="w-10 h-10 object-contain group-hover:scale-105 transition-transform"
               />
               <span className="text-white font-bold text-xl tracking-tight group-hover:text-fuchsia-100 transition-colors hidden sm:block">
-                Cadence
+                Resync
               </span>
             </Link>
 
@@ -133,7 +133,13 @@ const Dashboard = ({
                   <span className="hidden sm:inline">New Goal</span>
                 </span>
               </button>
-
+              <Link
+                to="/profile"
+                className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                title="Profile"
+              >
+                <User className="h-5 w-5" />
+              </Link>
               {!isGuest ? (
                 <button
                   onClick={logout}
@@ -149,7 +155,7 @@ const Dashboard = ({
                 >
                   Sign In
                 </button>
-              )}
+              )}{" "}
             </div>
           </div>
         </div>
@@ -157,6 +163,8 @@ const Dashboard = ({
 
       {/* Main Content */}
       <div className="relative z-10 container mx-auto px-4 pt-32 pb-12 max-w-7xl">
+        <Breadcrumbs />
+
         {/* Guest Mode Banner */}
         {isGuest && (
           <div className="mb-8 animate-in fade-in slide-in-from-top-4">
@@ -167,10 +175,6 @@ const Dashboard = ({
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <div className="flex items-center gap-2 text-fuchsia-400 font-mono text-xs mb-2 uppercase tracking-wider">
-              <Sparkles size={12} />
-              <span>Dashboard Overview</span>
-            </div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
               Welcome back,{" "}
               <span className="bg-gradient-to-r from-fuchsia-400 to-violet-400 bg-clip-text text-transparent">
@@ -299,12 +303,6 @@ const Dashboard = ({
               >
                 <BookOpen size={16} /> Notes
               </TabsTrigger>
-              <TabsTrigger
-                value="profile"
-                className="px-6 py-2.5 rounded-full text-sm font-medium text-gray-400 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all flex items-center gap-2"
-              >
-                <User size={16} /> Profile
-              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -356,7 +354,7 @@ const Dashboard = ({
           </TabsContent>
 
           <TabsContent value="calendar" className="space-y-6">
-            <CalendarView goals={goals} />
+            <ActivityHeatmap goals={goals} />
           </TabsContent>
 
           <TabsContent value="notes" className="space-y-6">
@@ -369,21 +367,24 @@ const Dashboard = ({
               </div>
             </div>
           </TabsContent>
-
-          <TabsContent value="profile" className="space-y-6">
-            <ProfilePage goals={goals} />
-          </TabsContent>
         </Tabs>
 
         {/* Goal Form Modal with Overlay */}
         {showForm && (
           <>
             {/* Dark overlay backdrop */}
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 animate-in fade-in" onClick={handleFormClose}></div>
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 animate-in fade-in"
+              onClick={handleFormClose}
+            ></div>
             {/* Modal container */}
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
               <div className="pointer-events-auto animate-in zoom-in slide-in-from-bottom-4">
-                <GoalForm goal={editingGoal} onSubmit={handleFormSubmit} onClose={handleFormClose} />
+                <GoalForm
+                  goal={editingGoal}
+                  onSubmit={handleFormSubmit}
+                  onClose={handleFormClose}
+                />
               </div>
             </div>
           </>
