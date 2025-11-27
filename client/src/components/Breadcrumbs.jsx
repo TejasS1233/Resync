@@ -16,6 +16,8 @@ const Breadcrumbs = () => {
     profile: "Profile",
     login: "Login",
     signup: "Sign Up",
+    privacy: "Privacy Policy",
+    terms: "Terms of Service",
   };
 
   return (

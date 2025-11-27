@@ -6,6 +6,8 @@ import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
 import LandingPage from "./components/LandingPage";
 import ProfilePage from "./components/ProfilePage";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 import { useAuth } from "./context/AuthContext";
@@ -294,6 +296,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
         <Route
           path="/dashboard"
           element={

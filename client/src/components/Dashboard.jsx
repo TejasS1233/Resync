@@ -113,7 +113,7 @@ const Dashboard = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link to="/" className="flex-shrink-0 flex items-center gap-3 cursor-pointer group">
+            <Link to="/" className="flex-shrink-0 flex items-center gap-0.5 cursor-pointer group">
               <img
                 src="/image.png"
                 alt="Resync Logo"

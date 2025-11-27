@@ -26,6 +26,8 @@ const ZenMode = ({ goals = [], onCompleteGoal, onClose }) => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showCustomTimer, setShowCustomTimer] = useState(false);
   const [customMinutes, setCustomMinutes] = useState(25);
+  const [isEditingTime, setIsEditingTime] = useState(false);
+  const [editMinutes, setEditMinutes] = useState("");
 
   // --- REFS & AUDIO ---
   const timerRef = useRef(null);
@@ -197,11 +199,67 @@ const ZenMode = ({ goals = [], onCompleteGoal, onClose }) => {
 
           {/* Time Display */}
           <div className="flex flex-col items-center">
-            <div
-              className={`font-mono text-7xl md:text-9xl font-bold tracking-tighter tabular-nums text-white`}
-            >
-              {formatTime(timeLeft)}
-            </div>
+            {isEditingTime && !isActive ? (
+              <div className="flex flex-col items-center gap-4">
+                <input
+                  type="number"
+                  min="1"
+                  max="180"
+                  value={editMinutes}
+                  onChange={(e) => setEditMinutes(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const mins = Math.max(1, Math.min(180, parseInt(editMinutes) || 1));
+                      const newTime = mins * 60;
+                      setTimeLeft(newTime);
+                      setInitialTime(newTime);
+                      setIsEditingTime(false);
+                      setMode("custom");
+                    } else if (e.key === "Escape") {
+                      setIsEditingTime(false);
+                    }
+                  }}
+                  className="w-48 bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white text-center text-5xl font-bold font-mono focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent"
+                  autoFocus
+                  placeholder="25"
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      const mins = Math.max(1, Math.min(180, parseInt(editMinutes) || 1));
+                      const newTime = mins * 60;
+                      setTimeLeft(newTime);
+                      setInitialTime(newTime);
+                      setIsEditingTime(false);
+                      setMode("custom");
+                    }}
+                    className="px-4 py-2 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                  >
+                    Set
+                  </button>
+                  <button
+                    onClick={() => setIsEditingTime(false)}
+                    className="px-4 py-2 bg-white/10 text-white font-bold rounded-lg hover:bg-white/20 transition-colors text-sm border border-white/20"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <p className="text-gray-400 text-xs">Enter minutes (1-180) or press Enter</p>
+              </div>
+            ) : (
+              <div
+                className={`font-mono text-7xl md:text-9xl font-bold tracking-tighter tabular-nums text-white ${!isActive ? "cursor-pointer hover:text-fuchsia-400 transition-colors" : ""}`}
+                onClick={() => {
+                  if (!isActive) {
+                    setIsEditingTime(true);
+                    setEditMinutes(Math.floor(timeLeft / 60).toString());
+                  }
+                }}
+                title={!isActive ? "Click to edit timer" : ""}
+              >
+                {formatTime(timeLeft)}
+              </div>
+            )}
 
             {/* Current Task Badge */}
             {!sessionComplete && (

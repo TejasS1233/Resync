@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   Menu,
   X,
@@ -111,6 +112,8 @@ const IntroOverlay = ({ onComplete }) => {
 
 // --- NAVBAR COMPONENT ---
 const Navbar = () => {
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
@@ -160,7 +163,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center gap-3 cursor-pointer group">
+          <Link to="/" className="flex-shrink-0 flex items-center gap-0.5 cursor-pointer group">
             <img
               src="/image.png"
               alt="Resync Logo"
@@ -169,7 +172,7 @@ const Navbar = () => {
             <span className="text-white font-bold text-xl tracking-tight group-hover:text-fuchsia-100 transition-colors">
               Resync
             </span>
-          </div>
+          </Link>
 
           {/* CTA Buttons */}
           <div className="flex items-center gap-4">
@@ -189,19 +192,48 @@ const Navbar = () => {
                 Install App
               </button>
             )}
-            <Link
-              to="/login"
-              className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
-            >
-              Sign in
-            </Link>
-            <Link
-              to="/dashboard"
-              className="group relative px-6 py-2.5 bg-white text-black rounded-full font-semibold text-sm overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-violet-200 to-fuchsia-200 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <span className="relative flex items-center gap-2">Get Started</span>
-            </Link>
+
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/profile"
+                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                >
+                  {user?.name || "Profile"}
+                </Link>
+                <button
+                  onClick={() => {
+                    logout();
+                    navigate("/");
+                  }}
+                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to="/dashboard"
+                  className="group relative px-6 py-2.5 bg-white text-black rounded-full font-semibold text-sm overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-200 to-fuchsia-200 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <span className="relative flex items-center gap-2">Get Started</span>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -621,82 +653,82 @@ const KeyboardMastery = () => {
   );
 };
 
-// --- PRICING SECTION ---
-const Pricing = () => {
+// --- COMMUNITY SECTION ---
+const CommunitySection = () => {
   return (
-    <section className="py-24 relative">
-      <div className="max-w-5xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">Simple, transparent pricing.</h2>
-          <p className="text-gray-400">Start for free, upgrade when you get serious.</p>
-        </div>
+    <section className="relative py-32 overflow-hidden bg-[#050505] flex items-center justify-center">
+      {/* --- BACKGROUND LAYERS --- */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.1),transparent_80%)] pointer-events-none"></div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Free Plan */}
-          <div className="p-8 rounded-3xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors relative group">
-            <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+      {/* Floating Orbs */}
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-violet-600/10 rounded-full blur-[100px] animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-fuchsia-600/10 rounded-full blur-[100px] animate-pulse delay-700"></div>
 
-            <h3 className="text-xl font-bold text-white mb-2">Hobby</h3>
-            <div className="text-4xl font-bold text-white mb-6">
-              $0 <span className="text-lg font-normal text-gray-500">/mo</span>
+      {/* --- MAIN CARD CONTAINER --- */}
+      <div className="relative z-10 w-full max-w-5xl px-6">
+        <div className="relative group rounded-3xl p-[1px] overflow-hidden">
+          {/* Animated Border Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:via-fuchsia-500/50 transition-all duration-1000 rotate-[20deg] translate-x-[-100%] group-hover:translate-x-[100%] w-[200%] h-[200%]"></div>
+          <div className="absolute inset-0 bg-white/5 rounded-3xl border border-white/10"></div>
+
+          {/* Card Content */}
+          <div className="relative bg-black/40 backdrop-blur-xl rounded-3xl p-12 md:p-20 text-center overflow-hidden">
+            {/* Decorative 'Terminal' Header */}
+            <div className="absolute top-6 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10">
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-yellow-500"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+              <span className="text-[10px] font-mono text-gray-500 ml-2">community.jsx</span>
             </div>
 
-            <Link
-              to="/dashboard"
-              className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-colors mb-8 flex items-center justify-center"
-            >
-              Get Started
-            </Link>
-
-            <ul className="space-y-4">
-              {["Unlimited Habits", "7-Day History", "Basic Charts", "Local Storage"].map(
-                (feat, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-400 text-sm">
-                    <Check size={16} className="text-gray-500" /> {feat}
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-
-          {/* Pro Plan */}
-          <div className="p-8 rounded-3xl bg-black border border-white/10 relative overflow-hidden group">
-            {/* Glowing Border Effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-600/20 via-violet-600/20 to-transparent opacity-100 pointer-events-none"></div>
-            <div className="absolute inset-0 border-2 border-transparent rounded-3xl [background:linear-gradient(#000,#000)padding-box,linear-gradient(45deg,#ec4899,#8b5cf6)border-box] mask-composite:exclude pointer-events-none"></div>
-
-            <div className="relative z-10">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-bold text-white">Pro</h3>
-                <span className="px-3 py-1 rounded-full bg-fuchsia-500/20 text-fuchsia-300 text-xs font-bold uppercase tracking-wider">
-                  Popular
+            <div className="max-w-3xl mx-auto space-y-8 relative z-10 pt-6">
+              <h2 className="text-4xl md:text-6xl font-black tracking-tight text-white">
+                Build the{" "}
+                <span className="bg-gradient-to-r from-fuchsia-400 to-violet-400 bg-clip-text text-transparent">
+                  future of habit tracking.
                 </span>
-              </div>
-              <div className="text-4xl font-bold text-white mb-6">
-                $5 <span className="text-lg font-normal text-gray-500">/mo</span>
-              </div>
+              </h2>
 
-              <Link
-                to="/dashboard"
-                className="w-full py-3 rounded-xl bg-white text-black font-bold hover:scale-[1.02] transition-transform mb-8 shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center justify-center"
-              >
-                Start Free Trial
-              </Link>
+              <p className="text-lg md:text-xl text-gray-400 leading-relaxed max-w-2xl mx-auto">
+                ReSync is open source and community-driven. Join hundreds of developers optimizing
+                their personal runtime. Contribute code, report bugs, or just say hello.
+              </p>
 
-              <ul className="space-y-4">
-                {[
-                  "Everything in Hobby",
-                  "Unlimited History",
-                  "Heatmap Visuals",
-                  "Mood Correlation",
-                  "Cloud Sync",
-                  "API Access",
-                ].map((feat, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-300 text-sm">
-                    <Check size={16} className="text-fuchsia-500" /> {feat}
-                  </li>
-                ))}
-              </ul>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+                {/* Primary Button */}
+                <a
+                  href="https://github.com/TejasS1233/Resync"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/btn relative inline-flex items-center justify-center px-8 py-4 bg-white text-black rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] overflow-hidden min-w-[200px]"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    <Terminal size={20} /> Star on GitHub
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-200 to-fuchsia-200 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+                </a>
+
+                {/* Secondary 'Terminal' Link */}
+                <a
+                  href="https://github.com/TejasS1233/Resync/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-mono text-sm border-b border-transparent hover:border-fuchsia-500 pb-0.5"
+                >
+                  <Terminal size={14} />
+                  <span>Submit an Issue</span>
+                  <ArrowRight size={14} />
+                </a>
+              </div>
+            </div>
+
+            {/* Background Code Decoration */}
+            <div className="absolute -bottom-10 -right-10 text-[10rem] font-black text-white/5 pointer-events-none select-none rotate-[-10deg]">
+              {`{ }`}
+            </div>
+            <div className="absolute top-20 -left-20 text-[8rem] font-black text-white/5 pointer-events-none select-none rotate-[10deg]">
+              {`</>`}
             </div>
           </div>
         </div>
@@ -918,8 +950,8 @@ const LandingPage = () => {
       {/* 3. KEYBOARD MASTERY SECTION */}
       <KeyboardMastery />
 
-      {/* 4. PRICING SECTION */}
-      <Pricing />
+      {/* 4. COMMUNITY SECTION */}
+      <CommunitySection />
 
       {/* 5. FOOTER */}
       <footer className="border-t border-white/10 bg-black pt-20 pb-10 relative overflow-hidden">
@@ -932,22 +964,16 @@ const LandingPage = () => {
             <span className="text-white font-bold text-xl tracking-tight">Resync</span>
           </div>
           <div className="flex gap-8 text-sm text-gray-400">
-            <a href="#" className="hover:text-fuchsia-400 transition-colors">
-              Privacy
-            </a>
-            <a href="#" className="hover:text-fuchsia-400 transition-colors">
-              Terms
-            </a>
-            <a href="#" className="hover:text-fuchsia-400 transition-colors">
-              Twitter
-            </a>
-            <a href="#" className="hover:text-fuchsia-400 transition-colors">
-              GitHub
-            </a>
+            <Link to="/privacy" className="hover:text-fuchsia-400 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link to="/terms" className="hover:text-fuchsia-400 transition-colors">
+              Terms of Service
+            </Link>
           </div>
         </div>
         <div className="text-center mt-10 text-gray-600 text-xs">
-          © {new Date().getFullYear()} Resync. All rights reserved.
+          Built by Tejas • © {new Date().getFullYear()} Resync
         </div>
       </footer>
     </div>
