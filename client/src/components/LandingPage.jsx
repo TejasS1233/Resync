@@ -771,7 +771,16 @@ const LandingPage = () => {
               <span className="relative z-10">Start Tracking Free</span>
               <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-300 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </Link>
-            <button className="px-8 py-4 rounded-full text-lg font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2 border border-transparent hover:border-white/10">
+            <button
+              onClick={() =>
+                window.open(
+                  "https://www.youtube.com/watch?v=CZeahoMetQ8",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+              className="px-8 py-4 rounded-full text-lg font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2 border border-transparent hover:border-white/10"
+            >
               View Live Demo
             </button>
           </div>
