@@ -62,3 +62,48 @@ npm install -g resync-cli
 ```
 
 #### Complete CLI Documentation: [cli/README.md](cli/README.md)
+
+##  Roadmap
+
+###  Core (Complete)
+- [x] Goal tracking with categories & frequencies  
+- [x] Dashboard stats, calendar, heatmap  
+- [x] Daily journaling + mood tracking  
+- [x] Authentication + guest mode  
+- [x] PWA install & offline support  
+- [x] CLI tool (auth, goals, notes, stats)
+
+---
+
+###  Enhancements (Next)
+- [ ] Command Palette + global search  
+- [ ] Keyboard shortcuts (⌘K, ⌘N, ⌘/, etc.)  
+- [ ] Notification system (browser + PWA)  
+- [ ] Focus Mode (UI dimming, block distractions)  
+- [ ] Session timer (Pomodoro inside web app)  
+- [ ] More detailed analytics (trends, mood insights)  
+- [ ] Sync improvements for multi-device use
+
+---
+
+###  CLI Expansion
+- [ ] TUI mode (text-based dashboard)  
+- [ ] Background reminders (Pomodoro, daily goals)  
+- [ ] Offline-only local database (SQLite)  
+- [ ] Plugin system for custom commands  
+
+---
+
+###  Optional Pro Features (Future)
+- [ ] Stripe billing integration  
+- [ ] History beyond 1 year  
+- [ ] API keys for external integrations  
+- [ ] Webhooks for automations  
+- [ ] Advanced analytics & exports  
+- [ ] Encrypted cloud backups  
+
+---
+
+<p align="center">
+  <strong><em>Small steps. Clean habits. Resync.</em></strong>
+</p>
