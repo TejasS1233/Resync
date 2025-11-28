@@ -1,81 +1,64 @@
-# Resync
+<p align="center"><img width="804" height="341" alt="image" src="https://github.com/user-attachments/assets/cca995c9-520a-4ef9-811e-0c703a6ef16c" />
+</p>
 
-A full-stack MERN application for tracking goals, habits, and daily progress with calendar views and activity heatmaps.
-
-## Features
-
-- Goal tracking with custom categories and frequencies
-- Guest mode with localStorage or full authentication
-- Calendar view showing daily progress
-- GitHub-style activity heatmap
-- Daily journaling with mood tracking
-- Real-time statistics and progress visualization
-- Command-line interface for terminal-based tracking
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=nodejs,express,mongodb,react,vite,git,github,vercel&perline=10" alt="Tech Stack" />
+</p>
 
 
-## Stack
+## [Resync - Web App](https://resync-sh.vercel.app/)
 
-**Backend:** Node.js, Express, MongoDB  
-**Frontend:** React, Vite, shadcn/ui, Lucide icons  
-**CLI:** Node.js, Commander, Inquirer, Axios
 
-## Usage
+Resync is a sleek, full-stack goal tracking web app with a dark, modern UI and smooth animations. It helps users visualize progress, track habits, and reflect daily, all in a responsive, installable Progressive Web App.
 
-### Web Application
+## Highlights
 
-1. Visit landing page or use guest mode
-2. Create goals with frequency (daily/weekly/monthly)
-3. Track progress with +/- buttons
-4. View calendar and activity heatmap
-5. Write daily notes with mood tracking
+- Visual dashboards, calendar view, and activity heatmap  
+- Daily journaling with mood tracking  
+- PWA installable with **offline support**
+- Responsive and accessible across devices  
+- Built with React, Vite, Tailwind CSS, Express, and MongoDB  
+- **Calendar & Heatmap:** Monthly calendar and GitHub-style activity heatmap visualize your consistency.
+  
 
-### CLI Tool
 
-Install the Resync CLI globally via npm:
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=CZeahoMetQ8" target="_blank" rel="noopener">
+    <img src="https://raw.githubusercontent.com/TejasS1233/Resync/main/client/public/Screenshot%202025-11-28%20163510.png" alt="Watch the Website Demo" />
+  </a>
+</p>
+
+*Click the image to watch the website demo on YouTube.*
+
+
+
+
+## [Resync CLI](https://www.npmjs.com/package/resync-cli)
+
+The **Resync CLI** is a command-line interface for managing goals, notes, and focus sessions directly from the terminal. It provides a fast, lightweight, and scriptable way to interact with the Resync goal tracking system without leaving the development environment.
+
+### Key Features
+
+- **Terminal-first workflow:** Add, update, and track goals without switching to a browser.
+- **Automation-friendly:** Can be integrated into scripts, cron jobs, or CI pipelines for automated tracking and reminders.
+- **Interactive yet efficient:** Guided prompts using Inquirer simplify command input while keeping operations concise.
+- **Readable output:** Color-coded tables, progress bars, and spinners provide clear feedback.
+- **Cross-platform:** Compatible with Windows, macOS, and Linux.
+- **Focus tools:** Includes a Pomodoro timer to support structured work sessions.
+- **Configurable & secure:** Supports JWT authentication with persistent token management and flexible API configuration.
+
+For developers and users who prefer lightweight, scriptable, and organized goal tracking.
+
+
+![Resync_terminal_demo (1)](https://github.com/user-attachments/assets/4891b89a-86e0-4411-b668-1ac5941aa198)
+
+### Installation
+
+Install the CLI globally via npm:
 
 ```bash
 npm install -g resync-cli
 ```
 
-Quick start:
-
-```bash
-# Configure for production
-resync config set-url
-
-# Login or register
-resync auth login
-
-# Start tracking
-resync goals add
-resync goals list
-resync stats summary
-resync focus start
-```
-
-**Available Commands:**
-
-- `resync auth` - Authentication (login, register, logout, whoami)
-- `resync goals` - Goal management (add, list, check, delete)
-- `resync notes` - Daily notes with mood tracking
-- `resync stats` - Statistics and dashboard
-- `resync focus` - Pomodoro timer and focus sessions
-- `resync config` - Configuration management
-
-**Links:**
-
-- npm Package: https://www.npmjs.com/package/resync-cli
-- CLI Documentation: [cli/README.md](cli/README.md)
-
-**Development:**
-
-```bash
-cd cli
-npm install
-npm link
-```
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
-
+#### Complete CLI Documentation: [cli/README.md](cli/README.md)
