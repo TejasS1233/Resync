@@ -8,6 +8,13 @@ import { registerNoteCommands } from "../commands/notes.js";
 import { registerStatsCommands } from "../commands/stats.js";
 import { registerFocusCommands } from "../commands/focus.js";
 import { registerConfigCommands } from "../commands/config.js";
+import { registerDaemonCommands } from "../commands/daemon.js";
+import { exec } from "child_process";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const program = new Command();
 
@@ -25,6 +32,31 @@ registerNoteCommands(program);
 registerStatsCommands(program);
 registerFocusCommands(program);
 registerConfigCommands(program);
+registerDaemonCommands(program);
+
+// TUI Mode Command
+program
+  .command("tui")
+  .description("Launch interactive TUI (Text User Interface) dashboard")
+  .action(async () => {
+    try {
+      // Execute the TUI script
+      const tuiPath = join(__dirname, "../commands/tui.js");
+      exec(`node "${tuiPath}"`, (error, stdout, stderr) => {
+        if (error) {
+          console.error(chalk.red(`Error launching TUI: ${error.message}`));
+          return;
+        }
+        if (stderr) {
+          console.error(stderr);
+        }
+        console.log(stdout);
+      });
+    } catch (error) {
+      console.error(chalk.red(`Failed to launch TUI: ${error.message}`));
+      process.exit(1);
+    }
+  });
 
 // Handle unknown commands
 program.on("command:*", () => {
