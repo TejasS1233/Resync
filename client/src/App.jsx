@@ -15,6 +15,7 @@ import { useAuth } from "./context/AuthContext";
 function App() {
   const { user, isAuthenticated, isGuest, loading: authLoading } = useAuth();
   const [goals, setGoals] = useState([]);
+  const [notes, setNotes] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showAuthForm, setShowAuthForm] = useState(false);
@@ -27,12 +28,33 @@ function App() {
     if (isAuthenticated) {
       fetchGoals();
       fetchStats();
+      fetchNotes();
     } else if (isGuest) {
       // Load from localStorage for guest mode
       loadGuestData();
       setLoading(false);
     }
   }, [isAuthenticated, isGuest, authLoading]);
+
+  const fetchNotes = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || "http://localhost:8000/api"}/notes`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setNotes(data.data || []);
+      }
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    }
+  };
 
   const loadGuestData = () => {
     const storedGoals = localStorage.getItem("guestGoals");
@@ -57,6 +79,10 @@ function App() {
 
     setGoals(goalsWithProgress);
     calculateGuestStats(goalsWithProgress);
+
+    // Load guest notes
+    const storedNotes = localStorage.getItem("guestNotes");
+    setNotes(storedNotes ? JSON.parse(storedNotes) : []);
   };
 
   const saveGuestData = (updatedGoals) => {
@@ -303,6 +329,7 @@ function App() {
           element={
             <Dashboard
               goals={goals}
+              notes={notes}
               stats={stats}
               loading={loading}
               onCreateGoal={handleCreateGoal}
@@ -310,6 +337,7 @@ function App() {
               onDeleteGoal={handleDeleteGoal}
               onUpdateProgress={handleUpdateProgress}
               onShowAuth={() => navigate("/login")}
+              onRefreshNotes={fetchNotes}
             />
           }
         />

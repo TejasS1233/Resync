@@ -11,7 +11,7 @@ import { useAuth } from "../context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
-const DailyNote = () => {
+const DailyNote = ({ onNoteSaved }) => {
   const { isGuest } = useAuth();
 
   // Helper to get local date string in YYYY-MM-DD format
@@ -85,6 +85,7 @@ const DailyNote = () => {
 
       localStorage.setItem("guestNotes", JSON.stringify(notes));
       toast.success("Note saved!");
+      onNoteSaved?.();
       return;
     }
 
@@ -93,6 +94,7 @@ const DailyNote = () => {
       const response = await axios.post(`${API_URL}/notes`, note);
       if (response.data.success) {
         toast.success("Note saved!");
+        onNoteSaved?.();
       }
     } catch (error) {
       toast.error("Failed to save note");

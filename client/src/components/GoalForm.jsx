@@ -39,7 +39,8 @@ const GoalForm = ({ goal, onSubmit, onClose }) => {
 
   return (
     <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px] bg-black/95 border border-gray-800 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 -z-10"></div>
         <DialogHeader>
           <DialogTitle>{goal ? "Edit Goal" : "Create New Goal"}</DialogTitle>
           <DialogDescription>

@@ -97,7 +97,11 @@ const OnboardingDialog = ({ open, onComplete }) => {
 
   return (
     <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-[700px]" onPointerDownOutside={(e) => e.preventDefault()}>
+      <DialogContent
+        className="sm:max-w-[700px] bg-black/95 border border-gray-800 relative overflow-hidden"
+        onPointerDownOutside={(e) => e.preventDefault()}
+      >
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 -z-10"></div>
         <div className="absolute right-4 top-4">
           <Button variant="ghost" size="sm" onClick={handleSkip}>
             Skip
