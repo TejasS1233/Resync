@@ -24,8 +24,6 @@ const ZenMode = ({ goals = [], onCompleteGoal, onClose }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [sessionComplete, setSessionComplete] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [showCustomTimer, setShowCustomTimer] = useState(false);
-  const [customMinutes, setCustomMinutes] = useState(25);
   const [isEditingTime, setIsEditingTime] = useState(false);
   const [editMinutes, setEditMinutes] = useState("");
 
@@ -74,19 +72,12 @@ const ZenMode = ({ goals = [], onCompleteGoal, onClose }) => {
     if (newMode === "focus") newTime = 25 * 60;
     else if (newMode === "shortBreak") newTime = 5 * 60;
     else if (newMode === "custom") {
-      setShowCustomTimer(true);
+      setIsEditingTime(true);
+      setEditMinutes(Math.floor(timeLeft / 60).toString());
       return;
     }
     setTimeLeft(newTime);
     setInitialTime(newTime);
-  };
-
-  const setCustomTime = () => {
-    const newTime = customMinutes * 60;
-    setTimeLeft(newTime);
-    setInitialTime(newTime);
-    setMode("custom");
-    setShowCustomTimer(false);
   };
 
   const handleFullscreen = () => {
@@ -353,55 +344,18 @@ const ZenMode = ({ goals = [], onCompleteGoal, onClose }) => {
                 Break
               </button>
               <button
-                onClick={() => switchMode("custom")}
+                onClick={() => {
+                  if (!isActive) {
+                    setIsEditingTime(true);
+                    setEditMinutes(Math.floor(timeLeft / 60).toString());
+                    setMode("custom");
+                  }
+                }}
                 className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${mode === "custom" ? "bg-violet-600 text-white shadow-lg" : "text-gray-500 hover:text-white"}`}
+                disabled={isActive}
               >
                 Custom
               </button>
-            </div>
-          </div>
-        )}
-
-        {/* Custom Timer Modal */}
-        {showCustomTimer && !sessionComplete && (
-          <div className="mt-12 animate-in slide-in-from-bottom-4 fade-in duration-500">
-            <div className="bg-[#111] border border-white/10 p-8 rounded-3xl shadow-2xl text-center max-w-sm mx-auto backdrop-blur-xl">
-              <div className="w-16 h-16 bg-gradient-to-br from-violet-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Target size={32} className="text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Set Custom Timer</h3>
-              <p className="text-gray-400 text-sm mb-6">How many minutes do you want to focus?</p>
-              <div className="mb-6">
-                <input
-                  type="number"
-                  min="1"
-                  max="180"
-                  value={customMinutes}
-                  onChange={(e) =>
-                    setCustomMinutes(Math.max(1, Math.min(180, parseInt(e.target.value) || 1)))
-                  }
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-center text-2xl font-bold focus:outline-none focus:ring-2 focus:ring-violet-500"
-                  autoFocus
-                />
-                <p className="text-gray-500 text-xs mt-2">1-180 minutes</p>
-              </div>
-              <div className="flex gap-3">
-                <button
-                  onClick={setCustomTime}
-                  className="flex-1 py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors"
-                >
-                  Start Timer
-                </button>
-                <button
-                  onClick={() => {
-                    setShowCustomTimer(false);
-                    setMode("focus");
-                  }}
-                  className="flex-1 py-3 bg-white/5 text-white font-bold rounded-xl hover:bg-white/10 transition-colors border border-white/10"
-                >
-                  Cancel
-                </button>
-              </div>
             </div>
           </div>
         )}
