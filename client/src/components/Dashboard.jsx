@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Plus,
   Target,
@@ -15,6 +15,10 @@ import {
   MoreVertical,
   X,
   Zap,
+  Timer,
+  TrendingUpIcon,
+  Command,
+  Keyboard as KeyboardIcon,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import GoalForm from "./GoalForm";
@@ -24,7 +28,13 @@ import NotesHistory from "./NotesHistory";
 import ActivityHeatmap from "./ActivityHeatmap";
 import Breadcrumbs from "./Breadcrumbs";
 import ZenMode from "./ZenMode";
+import CommandPalette from "./CommandPalette";
+import KeyboardShortcuts, { useKeyboardShortcuts } from "./KeyboardShortcuts";
+import FocusMode from "./FocusMode";
+import { NotificationButton, NotificationSettings } from "./NotificationSystem";
+import AnalyticsDashboard from "./AnalyticsDashboard";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "sonner";
 
 // Guest Banner Component
 const GuestBanner = ({ onSignUp }) => (
@@ -49,6 +59,7 @@ const GuestBanner = ({ onSignUp }) => (
 
 const Dashboard = ({
   goals,
+  notes = [],
   stats,
   loading,
   onCreateGoal,
@@ -56,13 +67,41 @@ const Dashboard = ({
   onDeleteGoal,
   onUpdateProgress,
   onShowAuth,
+  onRefreshNotes,
 }) => {
   // Always call hooks at the top level - before any early returns
   const { user, logout, isGuest } = useAuth();
+  const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
   const [editingGoal, setEditingGoal] = useState(null);
   const [filterCategory, setFilterCategory] = useState("all");
   const [showZenMode, setShowZenMode] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
+  const [showFocusMode, setShowFocusMode] = useState(false);
+  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+  const [activeTab, setActiveTab] = useState("goals");
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    onCommandPalette: () => setCommandPaletteOpen(true),
+    onNewGoal: () => setShowForm(true),
+    onSearch: () => setCommandPaletteOpen(true),
+    onQuickComplete: () => {
+      // Quick complete first incomplete goal
+      const incompleteGoal = goals.find((g) => !g.completed);
+      if (incompleteGoal) {
+        onUpdateProgress(incompleteGoal._id, 1);
+        toast.success(`Completed: ${incompleteGoal.title}`);
+      }
+    },
+    onFocusMode: () => setShowFocusMode(true),
+    onPomodoro: () => setShowZenMode(true),
+    onShowHelp: () => setShowKeyboardHelp(true),
+    onNavigate: (tab) => {
+      setActiveTab(tab);
+    },
+  });
 
   const handleEdit = (goal) => {
     setEditingGoal(goal);
@@ -125,7 +164,38 @@ const Dashboard = ({
             </Link>
 
             {/* Right Side Actions */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              {/* Command Palette */}
+              <button
+                onClick={() => setCommandPaletteOpen(true)}
+                className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                title="Command Palette (⌘K)"
+              >
+                <Command className="h-5 w-5" />
+              </button>
+
+              {/* Keyboard Shortcuts Help */}
+              <button
+                onClick={() => setShowKeyboardHelp(true)}
+                className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                title="Keyboard Shortcuts (⌘?)"
+              >
+                <KeyboardIcon className="h-5 w-5" />
+              </button>
+
+              {/* Notifications */}
+              <NotificationButton onClick={() => setShowNotificationSettings(true)} />
+
+              {/* Focus Mode */}
+              <button
+                onClick={() => setShowFocusMode(true)}
+                className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                title="Focus Mode (⌘⇧F)"
+              >
+                <Target className="h-5 w-5" />
+              </button>
+
+              {/* Zen Mode */}
               <button
                 onClick={() => setShowZenMode(true)}
                 className="group relative px-5 py-2.5 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-full font-bold text-sm overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(217,70,239,0.4)]"
@@ -136,6 +206,8 @@ const Dashboard = ({
                   <span className="hidden sm:inline">Zen</span>
                 </span>
               </button>
+
+              {/* New Goal Button */}
               <button
                 onClick={() => setShowForm(true)}
                 className="group relative px-5 py-2.5 bg-white text-black rounded-full font-bold text-sm overflow-hidden transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
@@ -146,6 +218,8 @@ const Dashboard = ({
                   <span className="hidden sm:inline">New Goal</span>
                 </span>
               </button>
+
+              {/* Profile */}
               <Link
                 to="/profile"
                 className="p-2 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all"
@@ -153,6 +227,8 @@ const Dashboard = ({
               >
                 <User className="h-5 w-5" />
               </Link>
+
+              {/* Logout / Sign In */}
               {!isGuest ? (
                 <button
                   onClick={logout}
@@ -168,7 +244,7 @@ const Dashboard = ({
                 >
                   Sign In
                 </button>
-              )}{" "}
+              )}
             </div>
           </div>
         </div>
@@ -294,7 +370,7 @@ const Dashboard = ({
         )}
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="goals" className="space-y-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
           {/* Custom Glass Tab List */}
           <div className="flex justify-center">
             <TabsList className="inline-flex h-auto p-1.5 bg-black/40 border border-white/10 backdrop-blur-xl rounded-full gap-1">
@@ -315,6 +391,12 @@ const Dashboard = ({
                 className="px-6 py-2.5 rounded-full text-sm font-medium text-gray-400 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all flex items-center gap-2"
               >
                 <BookOpen size={16} /> Notes
+              </TabsTrigger>
+              <TabsTrigger
+                value="analytics"
+                className="px-6 py-2.5 rounded-full text-sm font-medium text-gray-400 data-[state=active]:bg-white data-[state=active]:text-black data-[state=active]:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all flex items-center gap-2"
+              >
+                <TrendingUpIcon size={16} /> Analytics
               </TabsTrigger>
             </TabsList>
           </div>
@@ -376,11 +458,43 @@ const Dashboard = ({
                 <NotesHistory />
               </div>
               <div className="lg:col-span-1">
-                <DailyNote />
+                <DailyNote onNoteSaved={onRefreshNotes} />
               </div>
             </div>
           </TabsContent>
+
+          <TabsContent value="analytics" className="space-y-6">
+            <AnalyticsDashboard goals={goals} notes={notes} />
+          </TabsContent>
         </Tabs>
+
+        {/* Command Palette */}
+        <CommandPalette
+          goals={goals}
+          notes={notes}
+          onCreateGoal={() => setShowForm(true)}
+          onCompleteGoal={(goalId) => onUpdateProgress(goalId, 1)}
+          onWriteNote={() => {
+            setActiveTab("notes");
+            // Focus on the daily note component
+          }}
+          onEnterZenMode={() => setShowFocusMode(true)}
+          onLogout={logout}
+          isOpen={commandPaletteOpen}
+          onOpenChange={setCommandPaletteOpen}
+        />
+
+        {/* Keyboard Shortcuts Help */}
+        <KeyboardShortcuts isOpen={showKeyboardHelp} onOpenChange={setShowKeyboardHelp} />
+
+        {/* Focus Mode */}
+        <FocusMode isActive={showFocusMode} onClose={() => setShowFocusMode(false)} goals={goals} />
+
+        {/* Notification Settings */}
+        <NotificationSettings
+          isOpen={showNotificationSettings}
+          onClose={() => setShowNotificationSettings(false)}
+        />
 
         {/* Goal Form Modal with Overlay */}
         {showForm && (
