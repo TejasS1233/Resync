@@ -1,32 +1,17 @@
 {
   "name": "resync",
   "version": "1.0.0",
-  "description": "Resync - Goal tracking for the modern web. Track goals, habits, and reflect daily.",
+  "description": "Resync - Goal tracking for the modern web",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "node app/api/server.js",
-    "build": "npm run build --workspaces",
     "start": "NODE_ENV=production node app/api/server.js",
     "docker:build": "docker build -t resync .",
     "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "test": "echo \"No tests yet\" && exit 0"
+    "docker:down": "docker-compose down"
   },
-  "workspaces": [
-    "app/api",
-    "app/web",
-    "app/cli"
-  ],
-  "keywords": [
-    "goals",
-    "habits",
-    "productivity",
-    "tracker",
-    "notes",
-    "journal",
-    "pomodoro"
-  ],
-  "author": "Tejas Sidhwani <tejas.sidhwani@gmail.com>",
+  "keywords": ["goals", "habits", "productivity", "tracker"],
+  "author": "Tejas Sidhwani",
   "license": "ISC"
 }

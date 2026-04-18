@@ -9,19 +9,7 @@
 </pre>
 
 
-Resync is a sleek, full-stack goal tracking web app with a dark, modern UI and smooth animations. It helps users visualize progress, track habits, and reflect daily, all in a responsive, installable Progressive Web App with advanced productivity features.
-
-## Highlights
-
-- **Visual dashboards:** Calendar view, activity heatmap, and advanced analytics with trend charts
-- **Daily journaling** with mood tracking and correlation insights
-- **Command Palette (⌘K):** Quick search and navigation across all goals and notes
-- **Keyboard shortcuts:** 18+ shortcuts for power users (⌘N, ⌘/, Ctrl+Enter, etc.)
-- **Focus Mode:** Distraction-free work environment with ambient effects
-- **Zen Mode with Pomodoro:** Full-screen timer with customizable intervals and goal tracking
-- **Smart Notifications:** Browser and PWA notifications with customizable reminders
-- **PWA installable** with **offline support**
-- **Responsive and accessible** across devices
+Resync is a private, self-hosted goal tracking app. Track goals, journal daily, and stay focused — 100% local, your data stays on your machine.
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=CZeahoMetQ8" target="_blank" rel="noopener">
@@ -91,59 +79,6 @@ Resync/
 ├── data/         # SQLite database
 └── Dockerfile    # Single container build
 ```
-
-## Roadmap
-
-### Core Features (Complete ✅)
-
-- [x] Goal tracking with categories & frequencies
-- [x] Dashboard stats, calendar, heatmap
-- [x] Daily journaling + mood tracking
-- [x] Authentication + guest mode
-- [x] PWA install & offline support
-- [x] CLI tool (auth, goals, notes, stats, focus)
-
----
-
-### Productivity Enhancements (Complete ✅)
-
-- [x] **Command Palette** + global search (⌘K)
-- [x] **Keyboard shortcuts** (18+ shortcuts: ⌘K, ⌘N, ⌘/, Ctrl+Enter, etc.)
-- [x] **Notification system** (browser + PWA with customizable reminders)
-- [x] **Focus Mode** (distraction-free UI with ambient effects)
-- [x] **Zen Mode with Pomodoro** (full-screen timer integrated with goal tracking)
-- [x] **Advanced Analytics** (trends, mood correlation, category performance)
-
----
-
-### CLI Advanced Features (Complete ✅)
-
-- [x] **TUI mode** (interactive text-based dashboard with blessed)
-- [x] **Background daemon** (scheduled CLI-based reminders running independently)
-- [x] **Offline SQLite database** (full offline mode with sync queue)
-
----
-
-### Next Phase (In Progress)
-
-- [ ] Real-time sync improvements for multi-device use
-- [ ] Plugin system for custom CLI commands
-- [ ] Data export functionality (CSV, JSON)
-- [ ] Enhanced data visualization options
-
----
-
-### Optional Pro Features (Future)
-
-- [ ] Stripe billing integration
-- [ ] Extended history (beyond 1 year)
-- [ ] API keys for external integrations
-- [ ] Webhooks for automations
-- [ ] Encrypted cloud backups
-
----
-
-**Progress: 9/15 roadmap items complete (60%)** XD
 
 ---
 
