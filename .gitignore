@@ -8,8 +8,12 @@ out/
 .next/
 .angular/
 
- .env
- .env.*
+data/
+*.db
+*.db-*
+
+.env
+.env.*
 !.env.example
 package-lock.json
 yarn.lock

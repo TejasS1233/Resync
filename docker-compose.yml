@@ -1,0 +1,25 @@
+# Resync - Complete Local Private Setup
+# Run: docker-compose up -d
+# Access: http://localhost:3000
+
+services:
+  resync:
+    build: .
+    container_name: resync
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - resync_data:/app/data
+      - ./data:/app/data
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_PATH: /data/resync.db
+      JWT_SECRET: ${JWT_SECRET:-resync-local-secret-change-this}
+      JWT_EXPIRE: 7d
+      CORS_ORIGIN: http://localhost:3000
+      VITE_API_URL: /api
+
+volumes:
+  resync_data:
