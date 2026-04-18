@@ -1,11 +1,13 @@
-<p align="center"><img width="804" height="341" alt="image" src="https://github.com/user-attachments/assets/cca995c9-520a-4ef9-811e-0c703a6ef16c" />
-</p>
+<pre align="center">
+██████╗ ███████╗███████╗██╗   ██╗███╗   ██╗ ██████╗
+██╔══██╗██╔════╝██╔════╝╚██╗ ██╔╝████╗  ██║██╔════╝
+██████╔╝█████╗  ███████╗ ╚████╔╝ ██╔██╗ ██║██║     
+██╔══██╗██╔══╝  ╚════██║  ╚██╔╝  ██║╚██╗██║██║     
+██║  ██║███████╗███████║   ██║   ██║ ╚████║╚██████╗
+╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝   ╚═╝  ╚═══╝ ╚═════╝ 
+  ── track • journal • execute ──
+</pre>
 
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=nodejs,express,mongodb,react,vite,git,github,vercel&perline=10" alt="Tech Stack" />
-</p>
-
-## [Resync - Web App](https://resync-sh.vercel.app/)
 
 Resync is a sleek, full-stack goal tracking web app with a dark, modern UI and smooth animations. It helps users visualize progress, track habits, and reflect daily, all in a responsive, installable Progressive Web App with advanced productivity features.
 
