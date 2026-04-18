@@ -9,7 +9,7 @@
 </pre>
 
 
-Resync is a private, self-hosted goal tracking app. Track goals, journal daily, and stay focused — 100% local, your data stays on your machine.
+[Resync](https://resync-sh.vercel.app/) is a private, self-hosted goal tracking app. Track goals, journal daily, and stay focused — 100% local, your data stays on your machine.
 
 
 ## Quick Start (One Command)
