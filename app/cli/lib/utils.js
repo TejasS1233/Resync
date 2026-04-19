@@ -59,3 +59,15 @@ export function getProgressBar(percentage, width = 20) {
 
   return color(bar) + ` ${percentage.toFixed(0)}%`;
 }
+
+export function getConfig() {
+  const Conf = require("conf");
+  const config = new Conf({ projectName: "resync-cli" });
+  return config.store;
+}
+
+export function saveConfig(data) {
+  const Conf = require("conf");
+  const config = new Conf({ projectName: "resync-cli" });
+  Object.keys(data).forEach(key => config.set(key, data[key]));
+}
