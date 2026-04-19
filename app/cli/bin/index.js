@@ -11,9 +11,25 @@ import { registerConfigCommands } from "../commands/config.js";
 import { registerDaemonCommands } from "../commands/daemon.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { existsSync } from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+const isBun = typeof Bun !== "undefined";
+const tuiPath = join(__dirname, "../tui-opentui.js");
+
+async function launchTUI() {
+  if (isBun && existsSync(tuiPath)) {
+    console.log("Launching TUI (Bun)...");
+    const { default: tui } = await import("../tui-opentui.js");
+  } else {
+    console.log("Launching TUI (Node.js)...");
+    const tuiPath = join(__dirname, "../commands/tui.js");
+    const { spawn } = await import("child_process");
+    spawn("node", [tuiPath], { stdio: "inherit" });
+  }
+}
 
 const program = new Command();
 
@@ -24,7 +40,6 @@ program
   )
   .version("1.0.0");
 
-// Register command modules
 registerAuthCommands(program);
 registerGoalCommands(program);
 registerNoteCommands(program);
@@ -33,23 +48,19 @@ registerFocusCommands(program);
 registerConfigCommands(program);
 registerDaemonCommands(program);
 
-// Default to TUI mode
 program.action(async () => {
-  const { default: tui } = await import("../tui-opentui.js");
+  await launchTUI();
 });
 
-// Handle unknown commands
 program.on("command:*", () => {
   console.error(
-    chalk.red("\n✖ Invalid command. Use --help to see available commands.\n")
+    chalk.red("\nInvalid command. Use --help to see available commands.\n")
   );
   process.exit(1);
 });
 
-// Parse arguments
 program.parse(process.argv);
 
-// Show TUI if no command provided (default behavior)
 if (!process.argv.slice(2).length) {
-  const { default: tui } = await import("../tui-opentui.js");
+  await launchTUI();
 }

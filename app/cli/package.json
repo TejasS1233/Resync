@@ -7,9 +7,8 @@
     "resync": "bin/index.js"
   },
   "scripts": {
-    "start": "node bin/index.js",
-    "link": "npm link",
-    "unlink": "npm unlink -g resync-cli"
+    "start": "bun run tui-opentui.js || node bin/index.js",
+    "tui": "bun run tui-opentui.js"
   },
   "keywords": [
     "cli",
@@ -35,8 +34,7 @@
   },
   "homepage": "https://github.com/TejasS1233/Resync/tree/main/cli#readme",
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@opentui/core": "^0.1.100",
