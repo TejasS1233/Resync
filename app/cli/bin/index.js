@@ -9,7 +9,6 @@ import { registerStatsCommands } from "../commands/stats.js";
 import { registerFocusCommands } from "../commands/focus.js";
 import { registerConfigCommands } from "../commands/config.js";
 import { registerDaemonCommands } from "../commands/daemon.js";
-import { exec } from "child_process";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
@@ -34,29 +33,10 @@ registerFocusCommands(program);
 registerConfigCommands(program);
 registerDaemonCommands(program);
 
-// TUI Mode Command
-program
-  .command("tui")
-  .description("Launch interactive TUI (Text User Interface) dashboard")
-  .action(async () => {
-    try {
-      // Execute the TUI script
-      const tuiPath = join(__dirname, "../commands/tui.js");
-      exec(`node "${tuiPath}"`, (error, stdout, stderr) => {
-        if (error) {
-          console.error(chalk.red(`Error launching TUI: ${error.message}`));
-          return;
-        }
-        if (stderr) {
-          console.error(stderr);
-        }
-        console.log(stdout);
-      });
-    } catch (error) {
-      console.error(chalk.red(`Failed to launch TUI: ${error.message}`));
-      process.exit(1);
-    }
-  });
+// Default to TUI mode
+program.action(async () => {
+  const { default: tui } = await import("../tui-opentui.js");
+});
 
 // Handle unknown commands
 program.on("command:*", () => {
@@ -69,7 +49,7 @@ program.on("command:*", () => {
 // Parse arguments
 program.parse(process.argv);
 
-// Show help if no command provided
+// Show TUI if no command provided (default behavior)
 if (!process.argv.slice(2).length) {
-  program.outputHelp();
+  const { default: tui } = await import("../tui-opentui.js");
 }
