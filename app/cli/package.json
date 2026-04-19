@@ -4,11 +4,11 @@
   "description": "Command-line interface for Resync goal tracking application",
   "type": "module",
   "bin": {
-    "resync": "bin/index.js"
+    "resync": "tui-opentui.js"
   },
+  "preferUnplugged": true,
   "scripts": {
-    "start": "bun run tui-opentui.js || node bin/index.js",
-    "tui": "bun run tui-opentui.js"
+    "start": "bun run tui-opentui.js"
   },
   "keywords": [
     "cli",

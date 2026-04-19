@@ -11,25 +11,9 @@ import { registerConfigCommands } from "../commands/config.js";
 import { registerDaemonCommands } from "../commands/daemon.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { existsSync } from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-const isBun = typeof Bun !== "undefined";
-const tuiPath = join(__dirname, "../tui-opentui.js");
-
-async function launchTUI() {
-  if (isBun && existsSync(tuiPath)) {
-    console.log("Launching TUI (Bun)...");
-    const { default: tui } = await import("../tui-opentui.js");
-  } else {
-    console.log("Launching TUI (Node.js)...");
-    const tuiPath = join(__dirname, "../commands/tui.js");
-    const { spawn } = await import("child_process");
-    spawn("node", [tuiPath], { stdio: "inherit" });
-  }
-}
 
 const program = new Command();
 
@@ -48,8 +32,15 @@ registerFocusCommands(program);
 registerConfigCommands(program);
 registerDaemonCommands(program);
 
+program
+  .command("tui")
+  .description("Launch interactive TUI")
+  .action(async () => {
+    const { default: tui } = await import("../tui-opentui.js");
+  });
+
 program.action(async () => {
-  await launchTUI();
+  const { default: tui } = await import("../tui-opentui.js");
 });
 
 program.on("command:*", () => {
@@ -62,5 +53,5 @@ program.on("command:*", () => {
 program.parse(process.argv);
 
 if (!process.argv.slice(2).length) {
-  await launchTUI();
+  const { default: tui } = await import("../tui-opentui.js");
 }
