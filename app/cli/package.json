@@ -39,7 +39,9 @@
     "npm": ">=9.0.0"
   },
   "dependencies": {
+    "@opentui/core": "^0.1.100",
     "axios": "^1.6.0",
+    "better-sqlite3": "^11.0.0",
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.11.0",
     "boxen": "^7.1.1",
@@ -49,7 +51,6 @@
     "conf": "^12.0.0",
     "inquirer": "^9.2.12",
     "node-schedule": "^2.1.1",
-    "ora": "^8.0.1",
-    "better-sqlite3": "^11.0.0"
+    "ora": "^8.0.1"
   }
 }
